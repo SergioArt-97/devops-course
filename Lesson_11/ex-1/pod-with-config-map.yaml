@@ -1,0 +1,18 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: pod-env-var
+spec:
+  containers:
+    - name: pod-env-var
+      image: nginx
+      envFrom:
+        - configMapRef:
+            name: example-configmap
+      volumeMounts:
+        - name: config-volume
+          mountPath: /app/
+  volumes:
+    - name: config-volume
+      configMap:
+        name: game-config
