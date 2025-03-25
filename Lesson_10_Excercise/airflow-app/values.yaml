@@ -1,0 +1,29 @@
+executor: "LocalExecutor"
+
+config:
+  AIRFLOW__CORE__LOAD_EXAMPLES:
+    value: "True"  # Enables default example DAGs
+  AIRFLOW__WEBSERVER__EXPOSE_CONFIG:
+    value: "True"  # Allows viewing Airflow config in UI
+
+dags:
+  persistence:
+    enabled: true  # Keeps DAGs across pod restarts
+  gitSync:
+    enabled: false  # Set to true if using a Git repo for DAGs
+
+workers:
+  replicas: 2  # Number of worker pods if using CeleryExecutor
+
+webserver:
+  env:
+    - name: AIRFLOW__WEBSERVER__SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: airflow-webserver-secret
+          key: airflow-webserver-secret-key
+  service:
+    type: NodePort  # Can be "NodePort" if you want external access
+
+scheduler:
+  replicas: 1  # Number of scheduler replicas

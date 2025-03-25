@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: superset
+  labels:
+    app: superset
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: superset   # This selector matches the labels of your Pods
+  template:
+    metadata:
+      labels:
+        app: superset   # Ensure this label matches the selector above
+    spec:
+      containers:
+      - name: superset
+        image: amancevice/superset:latest
+        env:
+          - name: SUPERSET_CONFIG_PATH
+            value: /app/pythonpath/superset_config.py
+        ports:
+        - containerPort: 5000
+        volumeMounts:
+        - name: superset-config-volume
+          mountPath: /app/pythonpath/superset_config.py
+          subPath: superset_config.py
+      volumes:
+      - name: superset-config-volume
+        configMap:
+          name: superset-config

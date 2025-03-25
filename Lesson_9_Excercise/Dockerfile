@@ -16,4 +16,4 @@ COPY getUser.py /app/
 USER app
 
 # Command to run the script
-CMD ["python", "getUser.py"]
+CMD ["bash", "-c", "python getUser.py && sleep infinity"]
